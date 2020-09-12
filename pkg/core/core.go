@@ -14,7 +14,6 @@ import (
 var wg sync.WaitGroup
 
 func processFolder(file string) {
-	// Retries before return
 	isDir, err := utils.IsDirectory(file)
 	if err != nil {
 		fmt.Println(err)
@@ -22,34 +21,29 @@ func processFolder(file string) {
 		return
 	}
 	if isDir {
-		// Process folder
 		files := utils.ReadFilesFromDirectory(file)
 		for _, f := range files {
 			wg.Add(1)
 			go processFolder(path.Join(file, f))
 		}
 	} else {
-		// Process regular file
 		fileContent := utils.ReadFile(file)
 		fileHash := crypto.GetFileHash(fileContent)
 		structures.AddElement(fileHash, file)
 		fileContent = nil
 	}
 
-	// End task
 	wg.Done()
 }
 
-// Start function will start the thread process
+// Start function will begin the thread process
 func Start(config cmd.CobraInterface) {
 
 	// Excecute first thread
 	wg.Add(1)
-
-	// Start searching
 	go processFolder(config.RootFolder)
 
-	// Wait until goroutines ends
+	// Wait until all goroutines ends
 	wg.Wait()
 
 	resultMap := structures.GetMap()
