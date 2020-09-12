@@ -4,29 +4,25 @@ import (
 	"sync"
 )
 
-// MapWithSync have the map with mutex
-type MapWithSync struct {
-	mutex sync.RWMutex
-	smap  map[string][]string
-}
+// SMap is the structure that have the results
+var SMap sync.Map
 
 // AddElement add an element to the map
-func (c *MapWithSync) AddElement(key string, value string) {
-	c.mutex.Lock()
-	c.smap[key] = append(c.smap[key], value)
-	c.mutex.Unlock()
+func AddElement(key string, value string) {
+	results, ok := SMap.Load(key)
+	if ok == true {
+		tempArray := results.([]string)
+		tempArray = append(tempArray, value)
+		SMap.Store(key, tempArray)
+	} else {
+		var newArray []string
+		newArray = make([]string, 0)
+		newArray = append(newArray, value)
+		SMap.Store(key, newArray)
+	}
 }
 
 // GetMap returns the map
-func (c *MapWithSync) GetMap() map[string][]string {
-	c.mutex.RLock()
-	defer c.mutex.RUnlock()
-	return c.smap
-}
-
-// NewMap creates a new MapWithSync instance
-func NewMap() *MapWithSync {
-	return &MapWithSync{
-		smap: make(map[string][]string),
-	}
+func GetMap() *sync.Map {
+	return &SMap
 }

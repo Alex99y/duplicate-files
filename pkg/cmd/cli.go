@@ -8,9 +8,8 @@ import (
 
 // CobraInterface represents the CMD interface
 type CobraInterface struct {
-	RootCmd         *cobra.Command
-	NumberOfThreads uint64
-	RootFolder      string
+	RootCmd    *cobra.Command
+	RootFolder string
 }
 
 func (cmd *CobraInterface) setRootCommand() {
@@ -38,10 +37,8 @@ func (cmd *CobraInterface) setStart() {
 		Long:  "Long description",
 		Run: func(c *cobra.Command, arg []string) {
 			cmd.RootFolder, _ = c.PersistentFlags().GetString("path")
-			cmd.NumberOfThreads, _ = c.PersistentFlags().GetUint64("threads")
 		},
 	}
-	start.PersistentFlags().Uint64P("threads", "t", 4, "--threads 2")
 	start.PersistentFlags().StringP("path", "f", "", "--path /home")
 	start.MarkPersistentFlagRequired("path")
 
