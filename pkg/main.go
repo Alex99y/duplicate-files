@@ -8,5 +8,8 @@ import (
 func main() {
 	cobra := new(cmd.CobraInterface)
 	cobra.Execute()
+	if cobra.RootFolder == "" {
+		return
+	}
 	core.Start(*cobra)
 }

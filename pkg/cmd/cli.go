@@ -16,8 +16,7 @@ type CobraInterface struct {
 
 func (cmd *CobraInterface) setRootCommand() {
 	cmd.RootCmd = &cobra.Command{
-		Short: "Short",
-		Long:  "Long",
+		Short: "Application to search duplicate files inside a folder",
 	}
 }
 
@@ -26,7 +25,7 @@ func (cmd *CobraInterface) setVersion() {
 		Use:   "version",
 		Short: "Print app version",
 		Run: func(c *cobra.Command, arg []string) {
-			fmt.Print("v0.0.1")
+			fmt.Print("v0.1.0")
 		},
 	}
 	cmd.RootCmd.AddCommand(version)
@@ -34,9 +33,10 @@ func (cmd *CobraInterface) setVersion() {
 
 func (cmd *CobraInterface) setStart() {
 	start := &cobra.Command{
-		Use:   "start",
-		Short: "Execute duplicate files searcher",
-		Long:  "Long description",
+		Use:     "start",
+		Short:   "Search for duplicated files",
+		Example: "start [rootFolder]",
+		Long:    "This command receives a folder, find recursively and print all duplicate files inside this folder and his subfolderss",
 		Run: func(c *cobra.Command, args []string) {
 			cmd.RootFolder = args[0]
 		},
